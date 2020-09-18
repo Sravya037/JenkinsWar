@@ -25,7 +25,23 @@ node{
                )
 '''
    }*/
-   stage('Deploy to Tomcat'){
+   
+   stage('Archive artifacts (develop/master)') {
+            when {
+                anyOf {
+                    branch 'master'
+                    branch 'develop'
+                }
+            }
+            steps {
+                script {
+                    sh './package.sh'
+                }
+                archive '**/target/*.jar'
+                archiveArtifacts artifacts: '*.deb'
+            }
+        }
+ /*  stage('Deploy to Tomcat'){
   //   sh "copy target\\JenkinsWar.war \"${tomcatWeb}\\JenkinsWar.war\""
        sh "target/JenkinsWar.war"
    }
@@ -33,5 +49,5 @@ node{
          sleep(time:5,unit:"SECONDS") 
          sh "${tomcatBin}\\startup.bat"
          sleep(time:100,unit:"SECONDS")
-   }
+   } */
 }
