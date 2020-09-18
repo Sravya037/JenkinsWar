@@ -1,16 +1,16 @@
 node{
 
    def tomcatWeb = 'D:\\Auto_deployment\\apache-tomcat-9.0.30\\apache-tomcat-9.0.30\\webapps'
-  // def tomcatBin = 'D:\\Auto_deployment\\apache-tomcat-9.0.30\\apache-tomcat-9.0.30\\bin'
-   def tomcatBin = 'http://54.187.129.25:8070/'
+   def tomcatBin = 'D:\\Auto_deployment\\apache-tomcat-9.0.30\\apache-tomcat-9.0.30\\bin'
+  // def tomcatBin = 'http://54.187.129.25:8070/'
    def tomcatStatus = ''
    stage('SCM Checkout'){
      git 'https://github.com/sivajavatechie/JenkinsWar.git'
    }
    stage('Compile-Package-create-war-file'){
       // Get maven home path
-   //   def mvnHome =  tool name: 'maven-3', type: 'maven'   
-      def mvnHome = tool 'M3'
+      def mvnHome =  tool name: 'maven-3', type: 'maven'   
+     // def mvnHome = tool 'M3'
       sh "${mvnHome}/bin/mvn package"
       }
 /*   stage ('Stop Tomcat Server') {
@@ -26,28 +26,13 @@ node{
 '''
    }*/
    
-   stage('Archive artifacts (develop/master)') {
-            when {
-                anyOf {
-                    branch 'master'
-                    branch 'develop'
-                }
-            }
-            steps {
-                script {
-                    sh './package.sh'
-                }
-                archive '**/target/*.jar'
-                archiveArtifacts artifacts: '*.deb'
-            }
-        }
- /*  stage('Deploy to Tomcat'){
-  //   sh "copy target\\JenkinsWar.war \"${tomcatWeb}\\JenkinsWar.war\""
-       sh "target/JenkinsWar.war"
+  stage('Deploy to Tomcat'){
+     sh "copy target\\JenkinsWar.war \"${tomcatWeb}\\JenkinsWar.war\""
+      // sh "target/JenkinsWar.war"
    }
       stage ('Start Tomcat Server') {
          sleep(time:5,unit:"SECONDS") 
          sh "${tomcatBin}\\startup.bat"
          sleep(time:100,unit:"SECONDS")
-   } */
+   } 
 }
