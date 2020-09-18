@@ -27,7 +27,7 @@ node{
    }*/
    stage('Deploy to Tomcat'){
   //   sh "copy target\\JenkinsWar.war \"${tomcatWeb}\\JenkinsWar.war\""
-       sh "target\\JenkinsWar.war"
+       sh "target/JenkinsWar.war"
    }
       stage ('Start Tomcat Server') {
          sleep(time:5,unit:"SECONDS") 
